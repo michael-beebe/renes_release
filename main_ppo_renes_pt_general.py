@@ -148,7 +148,7 @@ def main():
     game_args.train_number = 3000
     game_args.test_number = 500
     game_args.max_steps = 50
-    # game_args.meta_solver = args.meta_solver
+    game_args.meta_solver = "ce"
 
     result_dir = "results"
     args.log_dir = "general"

@@ -8,6 +8,7 @@ import numpy as np
 
 from a2c_ppo_acktr import algo
 
+from a2c_ppo_acktr.algo.a2c_acktr import A2C_ACKTR
 # from a2c_ppo_acktr.algo import gail
 from a2c_ppo_acktr.arguments import get_args
 from game_envs.envs import make_vec_envs as game_make_vec_envs
@@ -126,8 +127,8 @@ def main():
     game_args.test_number = 500
     game_args.max_steps = 50
     game_args.action_size = 10
-    # game_args.meta_solver = args.meta_solver
-    # game_args.meta_solver = "ce"
+    #game_args.meta_solver = args.meta_solver
+    #game_args.meta_solver = "ce"
 
     # print(args.seed)
     # print(game_args.meta_solver)
@@ -214,15 +215,13 @@ def main():
     )
     actor_critic.to(device)
 
-    agent = algo.PPO(
-        actor_critic,
-        args.clip_param,
-        args.ppo_epoch,
-        args.num_mini_batch,
-        args.value_loss_coef,
-        args.entropy_coef,
+    agent = A2C_ACKTR(
+        actor_critic=actor_critic,
+        value_loss_coef=args.value_loss_coef,
+        entropy_coef=args.entropy_coef,
         lr=args.lr,
         eps=args.eps,
+        alpha=0.99,
         max_grad_norm=args.max_grad_norm,
     )
 

@@ -20,10 +20,17 @@ def _worker(
     from stable_baselines3.common.env_util import is_wrapped
 
     parent_remote.close()
-    env = env_fn_wrapper.var()
+    try:
+        env = env_fn_wrapper.var()
+    except Exception as e:
+        print(f"Error initializing environment: {e}")
+        remote.close()
+        return
     while True:
         try:
             cmd, data = remote.recv()
+            print(f"Worker received command: {cmd}")
+
             if cmd == "step":
                 observation, reward, done, info = env.step(data)
                 if done:
@@ -43,6 +50,7 @@ def _worker(
                 remote.close()
                 break
             elif cmd == "get_spaces":
+                print(f"Sending observation_space and action_space")
                 remote.send((env.observation_space, env.action_space))
             elif cmd == "env_method":
                 method = getattr(env, data[0])
