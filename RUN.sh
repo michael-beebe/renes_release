@@ -15,6 +15,7 @@
 mkdir -p logs
 
 # --- Set up python environment
+#source $HOME/.bashrc
 conda activate cs5388
 
 # --- Array of solvers
@@ -34,5 +35,5 @@ python main_ppo_renes_pt.py \
     2>&1 | tee $run_dir/training.log
 
 # --- Copy the slurm output files to the run directory
-cp logs/solver_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}.* $run_dir/
+cp logs/${solver}_${SLURM_ARRAY_JOB_ID}_${SLURM_ARRAY_TASK_ID}.* $run_dir/
 
