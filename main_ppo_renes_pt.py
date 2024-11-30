@@ -1,4 +1,6 @@
 import os
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='stable_baselines3')
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "3"
 import time
