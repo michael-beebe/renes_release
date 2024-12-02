@@ -1,0 +1,24 @@
+----------------------------------------
+  Running with solver: fp
+  Job ID: 14353948
+  Task ID: 0
+  Start time: Mon Dec  2 15:27:47 CST 2024
+----------------------------------------
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.12535, eval: 0.12534614011846573, abs mean reward: 0.45165103364132586, abs eval: 0.45165103364132586
+
+Evaluation using 384 episodes: mean reward 0.11146, eval: 0.11145878732656336, abs mean reward: 0.36339548547509165, abs eval: 0.3633954854750917
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.11121, eval: 0.11120940332132548, abs mean reward: 0.4192925459901043, abs eval: 0.4192925459901043
+
+Evaluation using 384 episodes: mean reward 0.09113, eval: 0.09113360204759097, abs mean reward: 0.3072110993479775, abs eval: 0.3072110993479775
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.10513, eval: 0.10512809038149393, abs mean reward: 0.39619834219145156, abs eval: 0.39619834219145156
+
+Evaluation using 384 episodes: mean reward 0.08694, eval: 0.08693854973168183, abs mean reward: 0.28844679543476665, abs eval: 0.2884467954347667
+

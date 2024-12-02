@@ -1,0 +1,24 @@
+----------------------------------------
+  Running with solver: ce
+  Job ID: 14353948
+  Task ID: 1
+  Start time: Mon Dec  2 15:27:47 CST 2024
+----------------------------------------
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.12535, eval: 0.12534614011846573, abs mean reward: 0.45165103364132586, abs eval: 0.45165103364132586
+
+Evaluation using 384 episodes: mean reward 0.11146, eval: 0.11145878732656336, abs mean reward: 0.36339548547509165, abs eval: 0.3633954854750917
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.10668, eval: 0.10668401461647722, abs mean reward: 0.3951960182678744, abs eval: 0.3951960182678744
+
+Evaluation using 384 episodes: mean reward 0.11337, eval: 0.11336711582967965, abs mean reward: 0.36803147598638447, abs eval: 0.3680314759863844
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.10210, eval: 0.10210386359141765, abs mean reward: 0.38357148535049573, abs eval: 0.3835714853504957
+
+Evaluation using 384 episodes: mean reward 0.11054, eval: 0.11054135690655068, abs mean reward: 0.3791162630367695, abs eval: 0.3791162630367695
+

@@ -1,4 +1,6 @@
 import os
+import warnings
+warnings.filterwarnings('ignore', category=UserWarning, module='stable_baselines3')
 import time
 from collections import deque
 import numpy as np
