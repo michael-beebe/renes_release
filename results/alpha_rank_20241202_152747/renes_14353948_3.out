@@ -1,0 +1,24 @@
+----------------------------------------
+  Running with solver: alpha_rank
+  Job ID: 14353948
+  Task ID: 3
+  Start time: Mon Dec  2 15:27:47 CST 2024
+----------------------------------------
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.12535, eval: 0.12534614011846573, abs mean reward: 0.45165103364132586, abs eval: 0.45165103364132586
+
+Evaluation using 384 episodes: mean reward 0.11146, eval: 0.11145878732656336, abs mean reward: 0.36339548547509165, abs eval: 0.3633954854750917
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.11895, eval: 0.11895221938654192, abs mean reward: 0.4427368133224887, abs eval: 0.4427368133224887
+
+Evaluation using 384 episodes: mean reward 0.09816, eval: 0.09816386410703928, abs mean reward: 0.3411448759141192, abs eval: 0.3411448759141192
+
+1000 episodes have been evaluated
+2000 episodes have been evaluated
+Evaluation using 2944 episodes: mean reward 0.11443, eval: 0.11442912717685011, abs mean reward: 0.4210031841314983, abs eval: 0.4210031841314983
+
+Evaluation using 384 episodes: mean reward 0.10179, eval: 0.10178778188355452, abs mean reward: 0.3669900963232524, abs eval: 0.36699009632325247
+

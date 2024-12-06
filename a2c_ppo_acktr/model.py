@@ -71,13 +71,43 @@ class Policy(nn.Module):
     def evaluate_actions(self, inputs, rnn_hxs, masks, action):
         value, actor_features, rnn_hxs = self.base(inputs, rnn_hxs, masks)
         if torch.isnan(actor_features).any():
-            print("nan value in actor feature")
+            print("NaN value detected in actor features.")
         dist = self.dist(actor_features)
 
         action_log_probs = dist.log_probs(action)
         dist_entropy = dist.entropy().mean()
 
         return value, action_log_probs, dist_entropy, rnn_hxs
+
+    def evaluate_actions_with_kl(self, inputs, rnn_hxs, masks, actions, old_actor_features=None):
+        """
+        Evaluate actions while computing the KL divergence for TRPO updates.
+        """
+        value, actor_features, rnn_hxs = self.base(inputs, rnn_hxs, masks)
+        dist = self.dist(actor_features)
+
+        # Log probabilities of the given actions
+        action_log_probs = dist.log_probs(actions)
+
+        # Entropy of the distribution
+        dist_entropy = dist.entropy().mean()
+
+        # KL divergence (with gradients enabled)
+        if old_actor_features is not None:
+            old_dist = self.dist(old_actor_features)
+        else:
+            old_dist = self.dist(actor_features.detach())  # Detach to treat as old policy
+        kl_div = torch.distributions.kl.kl_divergence(old_dist, dist).mean()
+
+        return value, action_log_probs, dist_entropy, kl_div
+
+    def get_actor_parameters(self):
+        """Return parameters of the actor network."""
+        return list(self.base.actor.parameters()) + list(self.dist.parameters())
+
+    def get_critic_parameters(self):
+        """Return parameters of the critic network."""
+        return list(self.base.critic.parameters()) + list(self.base.critic_linear.parameters())
 
 
 class NNBase(nn.Module):
@@ -115,48 +145,30 @@ class NNBase(nn.Module):
             x = x.squeeze(0)
             hxs = hxs.squeeze(0)
         else:
-            # x is a (T, N, -1) tensor that has been flatten to (T * N, -1)
             N = hxs.size(0)
             T = int(x.size(0) / N)
-
-            # unflatten
             x = x.view(T, N, x.size(1))
-
-            # Same deal with masks
             masks = masks.view(T, N)
-
-            # Let's figure out which steps in the sequence have a zero for any agent
-            # We will always assume t=0 has a zero in it as that makes the logic cleaner
             has_zeros = (masks[1:] == 0.0).any(dim=-1).nonzero().squeeze().cpu()
 
-            # +1 to correct the masks[1:]
             if has_zeros.dim() == 0:
-                # Deal with scalar
                 has_zeros = [has_zeros.item() + 1]
             else:
                 has_zeros = (has_zeros + 1).numpy().tolist()
 
-            # add t=0 and t=T to the list
             has_zeros = [0] + has_zeros + [T]
-
             hxs = hxs.unsqueeze(0)
             outputs = []
+
             for i in range(len(has_zeros) - 1):
-                # We can now process steps that don't have any zeros in masks together!
-                # This is much faster
                 start_idx = has_zeros[i]
                 end_idx = has_zeros[i + 1]
-
                 rnn_scores, hxs = self.gru(
                     x[start_idx:end_idx], hxs * masks[start_idx].view(1, -1, 1)
                 )
-
                 outputs.append(rnn_scores)
 
-            # assert len(outputs) == T
-            # x is a (T, N, -1) tensor
             x = torch.cat(outputs, dim=0)
-            # flatten
             x = x.view(T * N, -1)
             hxs = hxs.squeeze(0)
 
@@ -186,20 +198,13 @@ class CNNBase(NNBase):
             nn.ReLU(),
         )
 
-        init_ = lambda m: init(
-            m, nn.init.orthogonal_, lambda x: nn.init.constant_(x, 0)
-        )
-
         self.critic_linear = init_(nn.Linear(hidden_size, 1))
-
         self.train()
 
     def forward(self, inputs, rnn_hxs, masks):
         x = self.main(inputs / 255.0)
-
         if self.is_recurrent:
             x, rnn_hxs = self._forward_gru(x, rnn_hxs, masks)
-
         return self.critic_linear(x), x, rnn_hxs
 
 
@@ -233,16 +238,14 @@ class MLPBase(NNBase):
         )
 
         self.critic_linear = init_(nn.Linear(hidden_size, 1))
-
         self.train()
 
     def forward(self, inputs, rnn_hxs, masks):
         x = inputs
-
         if self.is_recurrent:
             x, rnn_hxs = self._forward_gru(x, rnn_hxs, masks)
 
         hidden_critic = self.critic(x)
         hidden_actor = self.actor(x)
-
         return self.critic_linear(hidden_critic), hidden_actor, rnn_hxs
+
